@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">智能交通系统</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">智能交通系统</string>
+    <string name="nav_header_subtitle">hr@zhonghui.vip</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">设置</string>
+    <string name="menu_home">主页</string>
+    <string name="menu_gallery">模块1</string>
+    <string name="menu_slideshow">模块2</string>
+    <string name="title_activity_login">登录</string>
+    <string name="prompt_email">请输入用户名</string>
+    <string name="prompt_password">请输入密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="login_tips">请填写完整登录信息</string>
+    <string name="login_error">登录失败</string>
+    <string name="login_success">登录成功</string>
+    <string name="login">登录</string>
+    <string name="prompt_ip">IP地址：例如192.168.0.100</string>
+    <string name="prompt_port">端口号：例如8080</string>
+    <string name="action_save">保存</string>
+    <string name="network_setting">网络设置</string>
+    <string name="save_commit">保存成功</string>
+</resources>
