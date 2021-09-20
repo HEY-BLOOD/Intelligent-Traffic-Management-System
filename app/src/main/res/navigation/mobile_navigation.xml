@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_fragment_01"
         android:name="vip.zhonghui.edu.ui.fragment01.Fragment01"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_fragment_01"
         tools:layout="@layout/fragment_01" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_fragment_02"
         android:name="vip.zhonghui.edu.ui.fragment02.Fragment02"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_fragment_02"
         tools:layout="@layout/fragment_02" />
 </navigation>

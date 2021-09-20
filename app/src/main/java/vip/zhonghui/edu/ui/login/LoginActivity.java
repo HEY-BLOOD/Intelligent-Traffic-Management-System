@@ -35,6 +35,7 @@ import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.ActivityLoginBinding;
 import vip.zhonghui.edu.ui.setting.SettingActivity;
 import vip.zhonghui.edu.url.Api;
+import vip.zhonghui.edu.utils.SharedPreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -146,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                         String result = dataJson.getString("RESULT");
                         if ("S".equals(result.toUpperCase())) {
                             handler.sendEmptyMessage(1);
+                            SharedPreferencesUtil.putUserName(getBaseContext(), untext);
                         } else {
                             handler.sendEmptyMessage(0);
                         }

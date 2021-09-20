@@ -24,7 +24,7 @@ public class Fragment02 extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textSlideshow;
-        textView.setText(R.string.menu_slideshow);
+        textView.setText(R.string.menu_fragment_02);
         return root;
     }
 

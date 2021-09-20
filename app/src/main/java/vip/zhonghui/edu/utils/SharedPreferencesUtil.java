@@ -115,4 +115,21 @@ public class SharedPreferencesUtil {
         sharedPreferences.edit().remove(key).commit();
     }
 
+    public static void putUserName(Context context, String userName) {
+        putString(context, PREF_USER_NAME_KEY, userName);
+    }
+
+    public static String getUserName(Context context) {
+        return getString(context, PREF_USER_NAME_KEY, "");
+    }
+
+    public static String getIp(Context context) {
+        return getString(context, "ip", "");
+    }
+
+    public static String getPort(Context context) {
+        return getString(context, "port", "");
+    }
+
+    private final static String PREF_USER_NAME_KEY = "UserName";
 }
