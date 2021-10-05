@@ -15,11 +15,34 @@
         android:id="@+id/nav_fragment_01"
         android:name="vip.zhonghui.edu.ui.fragment01.Fragment01"
         android:label="@string/menu_fragment_01"
-        tools:layout="@layout/fragment_01" />
+        tools:layout="@layout/fragment_01">
+        <action
+            android:id="@+id/action_nav_fragment_01_to_recordFragment"
+            app:destination="@id/recordFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_fragment_02"
         android:name="vip.zhonghui.edu.ui.fragment02.Fragment02"
         android:label="@string/menu_fragment_02"
         tools:layout="@layout/fragment_02" />
+    <fragment
+        android:id="@+id/nav_fragment_03"
+        android:name="vip.zhonghui.edu.ui.fragment03.Fragment03"
+        android:label="@string/menu_fragment_03"
+        tools:layout="@layout/fragment_03" >
+        <action
+            android:id="@+id/action_nav_fragment_03_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="vip.zhonghui.edu.ui.fragment01.RecordFragment"
+        android:label="@string/menu_fragment_record"
+        tools:layout="@layout/fragment_record" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="vip.zhonghui.edu.ui.fragment03.DetailFragment"
+        android:label="@string/menu_fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

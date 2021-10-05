@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:textColor="?attr/colorOnBackground"
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间："
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:textColor="?attr/colorOnBackground"
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="充值金额："
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:textSize="16sp"
+            android:id="@+id/cost_value"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            app:layout_constraintStart_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/date_time_value"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-5-21 8:19:21"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+        <TextView
+            android:layout_marginStart="8dp"
+            android:id="@+id/textView11"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="充值小车："
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+        <TextView
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="16sp"
+            android:id="@+id/card_id_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            app:layout_constraintStart_toEndOf="@+id/textView11"
+            app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+        <TextView
+            android:textColor="?attr/colorOnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="号"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/card_id_value"
+            app:layout_constraintTop_toTopOf="@+id/card_id_value" />
+
+        <TextView
+            android:textSize="16sp"
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:text="元"
+            app:layout_constraintStart_toEndOf="@+id/cost_value"
+            app:layout_constraintTop_toTopOf="@+id/cost_value" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup android:id="@+id/radio_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/r1c1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:text="Row 1 Column1" />
+
+        <RadioButton
+            android:id="@+id/r2c1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/r1c1"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:text="Row 2 Column 1" />
+
+        <RadioButton
+            android:id="@+id/r1c2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/r1c1"
+            android:gravity="center"
+            android:text="Row 1 Column 2" />
+
+        <RadioButton
+            android:id="@+id/r1c3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/r1c2"
+            android:gravity="center"
+            android:text="Row 1 Column 3" />
+    </RelativeLayout>
+</RadioGroup>

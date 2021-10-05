@@ -23,4 +23,8 @@
     <string name="action_save">保存</string>
     <string name="network_setting">网络设置</string>
     <string name="save_commit">保存成功</string>
+    <string name="action_detail">详情</string>
+    <string name="menu_fragment_03">数据分析</string>
+    <string name="menu_fragment_record">充值记录</string>
+    <string name="menu_fragment_detail">违章管理</string>
 </resources>

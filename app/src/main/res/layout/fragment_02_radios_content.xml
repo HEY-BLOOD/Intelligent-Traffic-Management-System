@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RadioGroup
+        android:id="@+id/sort_group_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/road_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="路口升序" />
+
+        <RadioButton
+            android:id="@+id/red_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="红灯升序" />
+
+        <RadioButton
+            android:id="@+id/yellow_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="黄灯升序" />
+
+        <RadioButton
+            android:id="@+id/green_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绿灯升序" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/sort_group_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="257dp"
+        tools:layout_editor_absoluteY="451dp">
+
+        <RadioButton
+            android:id="@+id/road_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="路口降序" />
+
+        <RadioButton
+            android:id="@+id/red_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="红灯降序" />
+
+        <RadioButton
+            android:id="@+id/yellow_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="黄灯降序" />
+
+        <RadioButton
+            android:id="@+id/green_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绿灯降序" />
+    </RadioGroup>
+</LinearLayout>
