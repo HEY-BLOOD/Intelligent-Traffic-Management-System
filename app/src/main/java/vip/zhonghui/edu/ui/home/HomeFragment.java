@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Random;
 
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import vip.zhonghui.edu.databinding.FragmentHomeBinding;
 import vip.zhonghui.edu.ui.BaseFragment;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
+import vip.zhonghui.edu.utils.UrlUtil;
 
 /**
  * 主页模块
@@ -30,6 +36,7 @@ import vip.zhonghui.edu.utils.SharedPreferencesUtil;
 // COMPLETED Step 1.1 用户登录成功后跳转到【主页】界面
 public class HomeFragment extends BaseFragment {
 
+    private static final String SENSE_RES_KEY = "searchRes";
     private FragmentHomeBinding binding;
 
     final private Handler mSenseHandler = new Handler(Looper.getMainLooper()) {
@@ -82,32 +89,35 @@ public class HomeFragment extends BaseFragment {
         }
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request request = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_weather"))
-//                .post(requestBody)
-//                .build();
+        Request request = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_all_sense"))
+                .post(requestBody)
+                .build();
 
-        SenseRes senseRes;
+        SenseRes senseRes = null;
 
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(request).execute();
-//           senseRes = GsonUtil.fromJson(response.body().toString(), SenseRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        // COMPLETED Send a http request
+        try {
+            Response response = mHttpClient.newCall(request).execute();
+            String jsonString = response.body().string();
+            Log.d("SenseRes-RESPONSE", jsonString);
+
+            senseRes = GsonUtil.fromJson(jsonString, SenseRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        String[] resArr = {"S", "F"};
-        senseRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"pm2.5\":" + new Random().nextInt(20) + ",\"co2\":5919,\"LightIntensity\":1711,\n" +
-                "\"humidity\":" + new Random().nextInt(100) + ",\"temperature\":" + new Random().nextInt(50) + "}", SenseRes.class);
+//        String[] resArr = {"S", "F"};
+//        senseRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"pm2.5\":" + new Random().nextInt(20) + ",\"co2\":5919,\"LightIntensity\":1711,\n" +
+//                "\"humidity\":" + new Random().nextInt(100) + ",\"temperature\":" + new Random().nextInt(50) + "}", SenseRes.class);
 
         return senseRes;
     }
 
 
     private void refreshSense(Bundle data) {
-        SenseRes senseRes = data.getParcelable("searchRes");
+        SenseRes senseRes = data.getParcelable(SENSE_RES_KEY);
 
         String RES = senseRes.getResult();
         if (RES.toUpperCase().equals("S")) {
@@ -125,7 +135,7 @@ public class HomeFragment extends BaseFragment {
             SenseRes senseRes = sendSenseRequest();
             Message message = new Message();
             Bundle data = new Bundle();
-            data.putParcelable("searchRes", senseRes);
+            data.putParcelable(SENSE_RES_KEY, senseRes);
 
             message.setData(data);
             mSenseHandler.sendMessage(message);

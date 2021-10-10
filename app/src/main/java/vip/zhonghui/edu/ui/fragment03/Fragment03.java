@@ -1,10 +1,12 @@
 package vip.zhonghui.edu.ui.fragment03;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,17 +26,21 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.Fragment03Binding;
 import vip.zhonghui.edu.ui.BaseFragment;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
+import vip.zhonghui.edu.utils.UrlUtil;
 
 /**
  * 数据分析
@@ -46,8 +52,8 @@ public class Fragment03 extends BaseFragment {
     private static final String PEC_CAR_KEY = "pecCarRes";
     private Fragment03Binding binding;
 
-    float mAllCarCount = 0;
-    float mPecCarCount = 0;
+    float mAllCarCount = -1;
+    float mPecCarCount = -1;
 
     private Handler mAllCarHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -102,8 +108,9 @@ public class Fragment03 extends BaseFragment {
 
     }
 
+    @SuppressLint("LongLogTag")
     private void updateChartUI() {
-        if (mAllCarCount != 0 && mPecCarCount != 0) {
+        if (mAllCarCount >= 0 && mPecCarCount >= 0) {
             setupPieChart(mAllCarCount, mPecCarCount);
         }
     }
@@ -171,31 +178,33 @@ public class Fragment03 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request rechargeRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_car_info"))
-//                .post(requestBody)
-//                .build();
+        Request rechargeRequest = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_car_info"))
+                .post(requestBody)
+                .build();
 
-        AllCarRes allCarRes;
+        AllCarRes allCarRes = null;
 
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(rechargeRequest).execute();
-//       allCarRes = GsonUtil.fromJson(response.body().toString(), AllCarRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        // COMPLETED Send a http request
+        try {
+            Response response = mHttpClient.newCall(rechargeRequest).execute();
+            String jsonString = response.body().string();
+            Log.d("AllCarRes-RESPONSE", jsonString);
+            allCarRes = GsonUtil.fromJson(jsonString, AllCarRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        allCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}" +
-                "]}", AllCarRes.class);
+//        allCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
+//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}" +
+//                "]}", AllCarRes.class);
 
         return allCarRes;
     }
@@ -212,26 +221,29 @@ public class Fragment03 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request rechargeRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_all_car_peccancy"))
-//                .post(requestBody)
-//                .build();
+        Request rechargeRequest = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_all_car_peccancy"))
+                .post(requestBody)
+                .build();
 
-        PecCarRes pecCarRes;
+        PecCarRes pecCarRes = null;
 
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(rechargeRequest).execute();
-//       allCarRes = GsonUtil.fromJson(response.body().toString(), AllCarRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        // COMPLETED Send a http request
+        try {
+            Response response = mHttpClient.newCall(rechargeRequest).execute();
+            String jsonString = response.body().string();
+            Log.d("PecCarRes-RESPONSE", jsonString);
+            pecCarRes = GsonUtil.fromJson(jsonString, PecCarRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        pecCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
-                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}," +
-                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}" +
-                "]}", PecCarRes.class);
+//        pecCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
+//                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}," +
+//                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}" +
+//                "]}", PecCarRes.class);
+
         return pecCarRes;
     }
 

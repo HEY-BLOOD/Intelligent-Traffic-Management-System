@@ -17,19 +17,23 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.Fragment02Binding;
 import vip.zhonghui.edu.ui.BaseFragment;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
+import vip.zhonghui.edu.utils.UrlUtil;
 
 /**
  * 红绿灯管理
@@ -204,25 +208,28 @@ public class Fragment02 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request lightRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_trafficlight_config"))
-//                .build();
+        Request lightRequest = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_trafficlight_config"))
+                .post(requestBody)
+                .build();
 
-        LightInfoRes lightInfoRes;
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(lightRequest).execute();
-//            lightInfoRes = GsonUtil.fromJson(response.body().toString(), LightInfoRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        LightInfoRes lightInfoRes = null;
+        // COMPLETED Send a http request
+        try {
+            Response response = mHttpClient.newCall(lightRequest).execute();
+            String jsonString = response.body().string();
+            Log.d("LightRes-RESPONSE", jsonString);
+            lightInfoRes = GsonUtil.fromJson(jsonString, LightInfoRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        Random random = new Random();
-        int n = random.nextInt(70);
-        String repoStr = String.format("{\"RESULT\":\"S\",\"ERRMSG\":\"设置成功\",\n" +
-                "\"RedTime\":\"%d\",\"GreenTime\":\"%d\",\"YellowTime\":\"%d\"}", n - 1, n, n + 1);
-        lightInfoRes = GsonUtil.fromJson(repoStr, LightInfoRes.class);
+//        Random random = new Random();
+//        int n = random.nextInt(70);
+//        String repoStr = String.format("{\"RESULT\":\"S\",\"ERRMSG\":\"设置成功\",\n" +
+//                "\"RedTime\":\"%d\",\"GreenTime\":\"%d\",\"YellowTime\":\"%d\"}", n - 1, n, n + 1);
+//        lightInfoRes = GsonUtil.fromJson(repoStr, LightInfoRes.class);
 
         lightInfoRes.setRoadId(roadId);
         Log.d("TTTTT", lightInfoRes.toString());

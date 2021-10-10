@@ -1,5 +1,6 @@
 package vip.zhonghui.edu.ui.fragment01;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,17 +22,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.Fragment01Binding;
 import vip.zhonghui.edu.ui.BaseFragment;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
+import vip.zhonghui.edu.utils.UrlUtil;
 
 /**
  * ETC充值
@@ -39,6 +45,8 @@ import vip.zhonghui.edu.utils.SharedPreferencesUtil;
 // COMPLETED Step 2.1 通过点击侧滑菜单中的【ETC充值】按钮进入本模块。
 public class Fragment01 extends BaseFragment {
 
+    private static final String RECHARGE_RES_KEY = "rechargeRes";
+    private static final String SEARCH_RES_KEY = "searchRes";
     private Fragment01Binding mBinding;
     private String[] mCarIdArray = {"1号", "2号", "3号"};
     private String[] mMoneyArray = {"100", "200", "300"};
@@ -55,7 +63,7 @@ public class Fragment01 extends BaseFragment {
             super.handleMessage(msg);
             Bundle data = msg.getData();
 
-            RechargeRes rechargeRes = data.getParcelable("rechargeRes");
+            RechargeRes rechargeRes = data.getParcelable(RECHARGE_RES_KEY);
             if (rechargeRes.getResult().equals("S")) {
                 Toast.makeText(getContext(), "充值成功", Toast.LENGTH_SHORT).show();
                 new SearchTask().start();
@@ -72,7 +80,7 @@ public class Fragment01 extends BaseFragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle data = msg.getData();
-            SearchRes searchRes = data.getParcelable("searchRes");
+            SearchRes searchRes = data.getParcelable(SEARCH_RES_KEY);
             if (searchRes.getResult().equals("S")) {
                 mBinding.accountRecharge.restMoney.setText(searchRes.getBalance() + "");
                 Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
@@ -94,8 +102,14 @@ public class Fragment01 extends BaseFragment {
         if (mRecordResList.isEmpty()) {
             mBinding.recordMessage.setText("暂无充值记录");
         } else {
+            // 按充值时间排序
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mRecordResList.sort(Comparator.comparing(RecordRes::getTime));
+            }
+            // 显示最近的一条充值记录
             RecordRes recordRes = mRecordResList.get(mRecordResList.size() - 1);
-            String message = String.format("%s%d号小车充值%d元", recordRes.getFormattedDate(), recordRes.getCarId(), recordRes.getCost());
+            String message = String.format("%s%d号小车充值%d元", recordRes.getFormattedDate(),
+                    recordRes.getCarId(), recordRes.getCost());
             mBinding.recordMessage.setText(message);
         }
     }
@@ -182,24 +196,26 @@ public class Fragment01 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request rechargeRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_car_account_balance"))
-//                .post(requestBody)
-//                .build();
+        Request rechargeRequest = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_car_account_balance"))
+                .post(requestBody)
+                .build();
 
-        SearchRes searchRes;
+        SearchRes searchRes = null;
 
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(rechargeRequest).execute();
-//       searchRes = GsonUtil.fromJson(response.body().toString(), SearchRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        // COMPLETEDs Send a http request
+        try {
+            Response response = mHttpClient.newCall(rechargeRequest).execute();
+            String jsonString = response.body().string();
+            Log.d("SearchRes-RESPONSE", jsonString);
+            searchRes = GsonUtil.fromJson(jsonString, SearchRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        String[] resArr = {"S", "F"};
-        searchRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"Balance\":" + new Random().nextInt(5000) + "}", SearchRes.class);
+//        String[] resArr = {"S", "F"};
+//        searchRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"Balance\":" + new Random().nextInt(5000) + "}", SearchRes.class);
 
         return searchRes;
     }
@@ -218,23 +234,25 @@ public class Fragment01 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request rechargeRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "set_car_account_recharge"))
-//                .post(requestBody)
-//                .build();
+        Request rechargeRequest = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "set_car_account_recharge"))
+                .post(requestBody)
+                .build();
 
-        RechargeRes rechargeRes;
-        // FIXME Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(rechargeRequest).execute();
-//            rechargeRes = GsonUtil.fromJson(response.body().toString(), RechargeRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        RechargeRes rechargeRes = null;
+        // COMPLETED Send a http request
+        try {
+            Response response = mHttpClient.newCall(rechargeRequest).execute();
+            String jsonString = response.body().string();
+            Log.d("RechargeRes-RESPONSE", jsonString);
+            rechargeRes = GsonUtil.fromJson(jsonString, RechargeRes.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // FIXME Fake data
-        String[] resArr = {"S", "F"};
-        rechargeRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"失败\"}", RechargeRes.class);
+//        String[] resArr = {"S", "F"};
+//        rechargeRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"失败\"}", RechargeRes.class);
 
 
         return rechargeRes;
@@ -253,23 +271,26 @@ public class Fragment01 extends BaseFragment {
 
         RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
 
-//        Request request = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_car_account_record"))
-//                .build();
+        Request request = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_car_account_record"))
+                .post(requestBody)
+                .build();
 
         List<RecordRes> recordResList = new ArrayList<>();
         try {
-            // FIXME Send a http request
-//            Response response = mHttpClient.newCall(request).execute();
-//            JSONObject jsonRes = new JSONObject(response.body().toString());
+            // COMPLETED Send a http request
+            Response response = mHttpClient.newCall(request).execute();
+            String jsonString = response.body().string();
+            Log.d("RecordRes-RESPONSE", jsonString);
+            JSONObject jsonRes = new JSONObject(jsonString);
 
             // FIXME Fake data
-            String jsonString = "{\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-                    "04:58:11\",\"Cost\":10},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-                    "04:58:19\",\"Cost\":20},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-                    "04:58:24\",\"Cost\":30},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-                    "04:58:28\",\"Cost\":40}],\"RESULT\":\"S\"}";
-            JSONObject jsonRes = new JSONObject(jsonString);
+//            String jsonString = "{\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
+//                    "04:58:11\",\"Cost\":10},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
+//                    "04:58:19\",\"Cost\":20},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
+//                    "04:58:24\",\"Cost\":30},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
+//                    "04:58:28\",\"Cost\":40}],\"RESULT\":\"S\"}";
+//            JSONObject jsonRes = new JSONObject(jsonString);
 
             if (jsonRes.optString("RESULT").equals("S")) {
                 JSONArray rowsDetail = jsonRes.optJSONArray("ROWS_DETAIL");
@@ -279,8 +300,8 @@ public class Fragment01 extends BaseFragment {
                     recordResList.add(recordRes);
                 }
             }
-//        } catch (IOException e) {
-//            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -297,7 +318,7 @@ public class Fragment01 extends BaseFragment {
 
             Message message = new Message();
             Bundle data = new Bundle();
-            data.putParcelable("searchRes", searchRes);
+            data.putParcelable(SEARCH_RES_KEY, searchRes);
 
             message.setData(data);
             mSearchHandler.sendMessage(message);
@@ -311,7 +332,7 @@ public class Fragment01 extends BaseFragment {
 
             Message message = new Message();
             Bundle data = new Bundle();
-            data.putParcelable("rechargeRes", rechargeRes);
+            data.putParcelable(RECHARGE_RES_KEY, rechargeRes);
 
             message.setData(data);
             mRechargeHandler.sendMessage(message);
