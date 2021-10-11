@@ -232,7 +232,7 @@ public class Fragment02 extends BaseFragment {
 //        lightInfoRes = GsonUtil.fromJson(repoStr, LightInfoRes.class);
 
         lightInfoRes.setRoadId(roadId);
-        Log.d("TTTTT", lightInfoRes.toString());
+        Log.d("LightInfoRes", lightInfoRes.toString());
         return lightInfoRes;
     }
 

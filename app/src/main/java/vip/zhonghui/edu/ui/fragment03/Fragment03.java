@@ -52,8 +52,8 @@ public class Fragment03 extends BaseFragment {
     private static final String PEC_CAR_KEY = "pecCarRes";
     private Fragment03Binding binding;
 
-    float mAllCarCount = -1;
-    float mPecCarCount = -1;
+    float mAllCarCount = 0;
+    float mPecCarCount = 0;
 
     private Handler mAllCarHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -67,14 +67,23 @@ public class Fragment03 extends BaseFragment {
             }
         }
     };
+
     private Handler mPecCarHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle data = msg.getData();
             PecCarRes pecCarRes = data.getParcelable(PEC_CAR_KEY);
+
             if (pecCarRes.getResult().equals("S")) {
-                mPecCarCount = pecCarRes.getRowsDetail().size();
+                List carList = new ArrayList<String>();
+                for (PecCarRes.ROWSDETAILDTO row : pecCarRes.getRowsDetail()) {
+                    String carNumber = row.getCarnumber();
+                    if (!carList.contains(carNumber)) {
+                        carList.add(carNumber);
+                    }
+                }
+                mPecCarCount = carList.size();
                 updateChartUI();
             }
         }
@@ -108,9 +117,8 @@ public class Fragment03 extends BaseFragment {
 
     }
 
-    @SuppressLint("LongLogTag")
     private void updateChartUI() {
-        if (mAllCarCount >= 0 && mPecCarCount >= 0) {
+        if (mAllCarCount > 0 && mPecCarCount > 0) {
             setupPieChart(mAllCarCount, mPecCarCount);
         }
     }
