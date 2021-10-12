@@ -100,7 +100,7 @@ public class Fragment01 extends BaseFragment {
 
     private void updateRecordUI() {
         if (mRecordResList.isEmpty()) {
-            mBinding.recordMessage.setText("暂无充值记录");
+            mBinding.recordMessage.setText(R.string.no_recharge_history);
         } else {
             // 按充值时间排序
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
