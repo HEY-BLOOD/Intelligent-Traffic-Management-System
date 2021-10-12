@@ -140,7 +140,7 @@ public class Fragment03 extends BaseFragment {
         dataSet.setColors(colors);
 
         // Labels
-        String[] labelArray = {"有违章", "无违章"};
+        String[] labelArray = {"", ""};  // 不显示标签
         List<String> labels = Arrays.asList(labelArray);
 
         // PieData
@@ -155,6 +155,7 @@ public class Fragment03 extends BaseFragment {
         binding.pieChart.setDescription(null);
         binding.pieChart.setHoleRadius(0f);
         binding.pieChart.setTransparentCircleRadius(0f);
+        binding.pieChart.getLegend().setEnabled(false);// 不显示图例
     }
 
     @Override
