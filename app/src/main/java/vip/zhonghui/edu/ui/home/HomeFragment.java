@@ -12,13 +12,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Random;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -45,7 +42,10 @@ public class HomeFragment extends BaseFragment {
             super.handleMessage(msg);
             Bundle data = msg.getData();
 
-            refreshSense(data);
+            SenseRes senseRes = data.getParcelable(SENSE_RES_KEY);
+            if (senseRes != null) {
+                receiveSense(senseRes);
+            }
 
         }
 
@@ -116,14 +116,14 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    private void refreshSense(Bundle data) {
-        SenseRes senseRes = data.getParcelable(SENSE_RES_KEY);
-
-        String RES = senseRes.getResult();
-        if (RES.toUpperCase().equals("S")) {
-            binding.senseInfo.pm25.setText(senseRes.getPm25() + "");
-            binding.senseInfo.temp.setText(senseRes.getTemperature() + "");
-            binding.senseInfo.hum.setText(senseRes.getHumidity() + "");
+    private void receiveSense(SenseRes senseRes) {
+        if (senseRes != null) {
+            String RES = senseRes.getResult();
+            if (RES.toUpperCase().equals("S")) {
+                binding.senseInfo.pm25.setText(senseRes.getPm25() + "");
+                binding.senseInfo.temp.setText(senseRes.getTemperature() + "");
+                binding.senseInfo.hum.setText(senseRes.getHumidity() + "");
+            }
         }
 
     }

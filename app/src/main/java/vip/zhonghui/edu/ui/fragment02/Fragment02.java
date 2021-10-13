@@ -189,7 +189,9 @@ public class Fragment02 extends BaseFragment {
             mLightList.clear();
             for (int i = 1; i <= ROAD_COUNT; i++) {
                 LightInfoRes lightInfoRes = sendLightRequest(i);
-                mLightList.add(lightInfoRes);
+                if (lightInfoRes != null) {
+                    mLightList.add(lightInfoRes);
+                }
             }
             mLightHandler.sendMessage(new Message());
         }
@@ -220,6 +222,9 @@ public class Fragment02 extends BaseFragment {
             String jsonString = response.body().string();
             Log.d("LightRes-RESPONSE", jsonString);
             lightInfoRes = GsonUtil.fromJson(jsonString, LightInfoRes.class);
+
+            lightInfoRes.setRoadId(roadId);
+            Log.d("LightInfoRes", lightInfoRes.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -231,8 +236,6 @@ public class Fragment02 extends BaseFragment {
 //                "\"RedTime\":\"%d\",\"GreenTime\":\"%d\",\"YellowTime\":\"%d\"}", n - 1, n, n + 1);
 //        lightInfoRes = GsonUtil.fromJson(repoStr, LightInfoRes.class);
 
-        lightInfoRes.setRoadId(roadId);
-        Log.d("LightInfoRes", lightInfoRes.toString());
         return lightInfoRes;
     }
 

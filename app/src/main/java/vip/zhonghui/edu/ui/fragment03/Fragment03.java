@@ -1,6 +1,5 @@
 package vip.zhonghui.edu.ui.fragment03;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,12 +60,18 @@ public class Fragment03 extends BaseFragment {
             super.handleMessage(msg);
             Bundle data = msg.getData();
             AllCarRes allCarRes = data.getParcelable(ALL_CAR_KEY);
-            if (allCarRes.getResult().equals("S")) {
-                mAllCarCount = allCarRes.getRowsDetail().size();
-                updateChartUI();
+            if (allCarRes != null) {
+                receiveAllCar(allCarRes);
             }
         }
     };
+
+    private void receiveAllCar(AllCarRes allCarRes) {
+        if (allCarRes.getResult().equals("S")) {
+            mAllCarCount = allCarRes.getRowsDetail().size();
+            updateChartUI();
+        }
+    }
 
     private Handler mPecCarHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -74,20 +79,25 @@ public class Fragment03 extends BaseFragment {
             super.handleMessage(msg);
             Bundle data = msg.getData();
             PecCarRes pecCarRes = data.getParcelable(PEC_CAR_KEY);
-
-            if (pecCarRes.getResult().equals("S")) {
-                List carList = new ArrayList<String>();
-                for (PecCarRes.ROWSDETAILDTO row : pecCarRes.getRowsDetail()) {
-                    String carNumber = row.getCarnumber();
-                    if (!carList.contains(carNumber)) {
-                        carList.add(carNumber);
-                    }
-                }
-                mPecCarCount = carList.size();
-                updateChartUI();
+            if (pecCarRes != null) {
+                receivePecCar(pecCarRes);
             }
         }
     };
+
+    private void receivePecCar(PecCarRes pecCarRes) {
+        if (pecCarRes.getResult().equals("S")) {
+            List carList = new ArrayList<String>();
+            for (PecCarRes.ROWSDETAILDTO row : pecCarRes.getRowsDetail()) {
+                String carNumber = row.getCarnumber();
+                if (!carList.contains(carNumber)) {
+                    carList.add(carNumber);
+                }
+            }
+            mPecCarCount = carList.size();
+            updateChartUI();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

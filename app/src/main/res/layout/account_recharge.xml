@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="1000"
+        tools:text="1000"
         android:textColor="?attr/colorOnBackground"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/textView4"
@@ -89,7 +89,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/rest_money"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/textView5"/>
 
     <Spinner
         android:id="@+id/money_spinner"

@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -64,16 +63,22 @@ public class Fragment01 extends BaseFragment {
             Bundle data = msg.getData();
 
             RechargeRes rechargeRes = data.getParcelable(RECHARGE_RES_KEY);
-            if (rechargeRes.getResult().equals("S")) {
-                Toast.makeText(getContext(), "充值成功", Toast.LENGTH_SHORT).show();
-                new SearchTask().start();
-                // COMPLETED Step 2.7 每次充值成功后更新顶部最近一次充值记录
-                new RecordTask().start();
-            } else {
-                Toast.makeText(getContext(), "充值失败", Toast.LENGTH_SHORT).show();
+            if (rechargeRes != null) {
+                receiveRecharge(rechargeRes);
             }
         }
     };
+
+    private void receiveRecharge(RechargeRes rechargeRes) {
+        if (rechargeRes.getResult().equals("S")) {
+            Toast.makeText(getContext(), "充值成功", Toast.LENGTH_SHORT).show();
+            new SearchTask().start();
+            // COMPLETED Step 2.7 每次充值成功后更新顶部最近一次充值记录
+            new RecordTask().start();
+        } else {
+            Toast.makeText(getContext(), "充值失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private Handler mSearchHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -81,24 +86,30 @@ public class Fragment01 extends BaseFragment {
             super.handleMessage(msg);
             Bundle data = msg.getData();
             SearchRes searchRes = data.getParcelable(SEARCH_RES_KEY);
-            if (searchRes.getResult().equals("S")) {
-                mBinding.accountRecharge.restMoney.setText(searchRes.getBalance() + "");
-                Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "查询失败", Toast.LENGTH_SHORT).show();
+            if (searchRes != null) {
+                receiveSearch(searchRes);
             }
         }
     };
+
+    private void receiveSearch(SearchRes searchRes) {
+        if (searchRes.getResult().equals("S")) {
+            mBinding.accountRecharge.restMoney.setText(searchRes.getBalance() + "");
+            Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "查询失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private Handler mRecordHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            updateRecordUI();
+            receiveRecord();
         }
     };
 
-    private void updateRecordUI() {
+    private void receiveRecord() {
         if (mRecordResList.isEmpty()) {
             mBinding.recordMessage.setText(R.string.no_recharge_history);
         } else {
