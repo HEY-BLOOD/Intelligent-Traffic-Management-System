@@ -51,8 +51,8 @@ public class Fragment03 extends BaseFragment {
     private static final String PEC_CAR_KEY = "pecCarRes";
     private Fragment03Binding binding;
 
-    float mAllCarCount = 0;
-    float mPecCarCount = 0;
+    float mAllCarCount = -1;
+    float mPecCarCount = -1;
 
     private Handler mAllCarHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -128,7 +128,7 @@ public class Fragment03 extends BaseFragment {
     }
 
     private void updateChartUI() {
-        if (mAllCarCount > 0 && mPecCarCount > 0) {
+        if (mAllCarCount > -1 && mPecCarCount > -1) {
             setupPieChart(mAllCarCount, mPecCarCount);
         }
     }
