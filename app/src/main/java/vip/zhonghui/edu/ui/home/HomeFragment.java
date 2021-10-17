@@ -107,11 +107,6 @@ public class HomeFragment extends BaseFragment {
             e.printStackTrace();
         }
 
-        // FIXME Fake data
-//        String[] resArr = {"S", "F"};
-//        senseRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"pm2.5\":" + new Random().nextInt(20) + ",\"co2\":5919,\"LightIntensity\":1711,\n" +
-//                "\"humidity\":" + new Random().nextInt(100) + ",\"temperature\":" + new Random().nextInt(50) + "}", SenseRes.class);
-
         return senseRes;
     }
 

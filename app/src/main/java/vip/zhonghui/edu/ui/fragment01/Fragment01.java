@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -94,7 +95,9 @@ public class Fragment01 extends BaseFragment {
 
     private void receiveSearch(SearchRes searchRes) {
         if (searchRes.getResult().equals("S")) {
-            mBinding.accountRecharge.restMoney.setText(searchRes.getBalance() + "");
+            DecimalFormat decimalFormat = new DecimalFormat("##,##0");
+//            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(searchRes.getBalance()));
+            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(123535));
             Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "查询失败", Toast.LENGTH_SHORT).show();
@@ -195,7 +198,7 @@ public class Fragment01 extends BaseFragment {
         });
     }
 
-    private SearchRes sendSearchRequest() {
+    private SearchRes requestSearch() {
         JSONObject jsonParams = new JSONObject();
 
         try {
@@ -205,34 +208,35 @@ public class Fragment01 extends BaseFragment {
             e.printStackTrace();
         }
 
-        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+        SearchRes searchRes = HttpUtil.sendHttpRequest(getContext(),
+                "get_car_account_balance",
+                jsonParams,
+                SearchRes.class);
 
-        Request rechargeRequest = new Request.Builder()
-                .url(UrlUtil.getUrl(getContext(), "get_car_account_balance"))
-                .post(requestBody)
-                .build();
-
-        SearchRes searchRes = null;
-
-        // COMPLETEDs Send a http request
-        try {
-            Response response = mHttpClient.newCall(rechargeRequest).execute();
-            String jsonString = response.body().string();
-            Log.d("SearchRes-RESPONSE", jsonString);
-            searchRes = GsonUtil.fromJson(jsonString, SearchRes.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // FIXME Fake data
-//        String[] resArr = {"S", "F"};
-//        searchRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"成功\",\"Balance\":" + new Random().nextInt(5000) + "}", SearchRes.class);
+//        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+//
+//        Request rechargeRequest = new Request.Builder()
+//                .url(UrlUtil.getUrl(getContext(), "get_car_account_balance"))
+//                .post(requestBody)
+//                .build();
+//
+//        SearchRes searchRes = null;
+//
+//        // COMPLETEDs Send a http request
+//        try {
+//            Response response = mHttpClient.newCall(rechargeRequest).execute();
+//            String jsonString = response.body().string();
+//            Log.d("SearchRes-RESPONSE", jsonString);
+//            searchRes = GsonUtil.fromJson(jsonString, SearchRes.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return searchRes;
     }
 
 
-    private RechargeRes sendRechargeRequest() {
+    private RechargeRes requestRecharge() {
         JSONObject jsonParams = new JSONObject();
 
         try {
@@ -243,34 +247,34 @@ public class Fragment01 extends BaseFragment {
             e.printStackTrace();
         }
 
-        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+        RechargeRes rechargeRes = HttpUtil.sendHttpRequest(getContext(),
+                "set_car_account_recharge",
+                jsonParams,
+                RechargeRes.class);
 
-        Request rechargeRequest = new Request.Builder()
-                .url(UrlUtil.getUrl(getContext(), "set_car_account_recharge"))
-                .post(requestBody)
-                .build();
+//        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+//
+//        Request rechargeRequest = new Request.Builder()
+//                .url(UrlUtil.getUrl(getContext(), "set_car_account_recharge"))
+//                .post(requestBody)
+//                .build();
+//
+//        RechargeRes rechargeRes = null;
 
-        RechargeRes rechargeRes = null;
-        // COMPLETED Send a http request
-        try {
-            Response response = mHttpClient.newCall(rechargeRequest).execute();
-            String jsonString = response.body().string();
-            Log.d("RechargeRes-RESPONSE", jsonString);
-            rechargeRes = GsonUtil.fromJson(jsonString, RechargeRes.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // FIXME Fake data
-//        String[] resArr = {"S", "F"};
-//        rechargeRes = GsonUtil.fromJson("{\"RESULT\":" + resArr[new Random().nextInt(resArr.length)] + ",\"ERRMSG\":\"失败\"}", RechargeRes.class);
-
+//        try {
+//            Response response = mHttpClient.newCall(rechargeRequest).execute();
+//            String jsonString = response.body().string();
+//            Log.d("RechargeRes-RESPONSE", jsonString);
+//            rechargeRes = GsonUtil.fromJson(jsonString, RechargeRes.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return rechargeRes;
     }
 
 
-    private List<RecordRes> sendRecordListRequest(int carId) {
+    private List<RecordRes> requestRecordList(int carId) {
         JSONObject jsonParams = new JSONObject();
         try {
             // {"UserName":"user1","CarId":1}
@@ -293,15 +297,10 @@ public class Fragment01 extends BaseFragment {
             Response response = mHttpClient.newCall(request).execute();
             String jsonString = response.body().string();
             Log.d("RecordRes-RESPONSE", jsonString);
+//
+//
             JSONObject jsonRes = new JSONObject(jsonString);
 
-            // FIXME Fake data
-//            String jsonString = "{\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-//                    "04:58:11\",\"Cost\":10},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-//                    "04:58:19\",\"Cost\":20},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-//                    "04:58:24\",\"Cost\":30},{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
-//                    "04:58:28\",\"Cost\":40}],\"RESULT\":\"S\"}";
-//            JSONObject jsonRes = new JSONObject(jsonString);
 
             if (jsonRes.optString("RESULT").equals("S")) {
                 JSONArray rowsDetail = jsonRes.optJSONArray("ROWS_DETAIL");
@@ -325,7 +324,7 @@ public class Fragment01 extends BaseFragment {
         @Override
         public void run() {
             super.run();
-            SearchRes searchRes = sendSearchRequest();
+            SearchRes searchRes = requestSearch();
 
             Message message = new Message();
             Bundle data = new Bundle();
@@ -339,7 +338,7 @@ public class Fragment01 extends BaseFragment {
     class RechargeTask extends Thread {
         @Override
         public void run() {
-            RechargeRes rechargeRes = sendRechargeRequest();
+            RechargeRes rechargeRes = requestRecharge();
 
             Message message = new Message();
             Bundle data = new Bundle();
@@ -356,7 +355,7 @@ public class Fragment01 extends BaseFragment {
             super.run();
             mRecordResList.clear();
             for (int i = 1; i <= RECORD_CARD_ID_COUNT; i++) {
-                List<RecordRes> recordResList = sendRecordListRequest(i);
+                List<RecordRes> recordResList = requestRecordList(i);
                 mRecordResList.addAll(recordResList);
             }
             Log.d("RecordTask", "size - " + mRecordResList.size());

@@ -21,11 +21,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,7 +159,14 @@ public class Fragment03 extends BaseFragment {
         // PieData
         PieData pieData = new PieData(labels, dataSet);
         pieData.setDrawValues(true);  // optional
-        pieData.setValueFormatter(new PercentFormatter());
+        // 小数点后二位
+        pieData.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float v, Entry entry, int i, ViewPortHandler viewPortHandler) {
+                DecimalFormat format = new DecimalFormat("00.00");
+                return format.format(v) + "%";
+            }
+        });
         pieData.setValueTextSize(15f);
 
         binding.pieChart.setData(pieData);
@@ -214,17 +224,6 @@ public class Fragment03 extends BaseFragment {
             e.printStackTrace();
         }
 
-        // FIXME Fake data
-//        allCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}," +
-//                "{\"carnumber\":\"鲁 B10001\",\"number\":1,\" pcardid \":\"370101196101011001\",\"buydata\":\"2016.5.1\",\"carbrand\":\"audi\"}" +
-//                "]}", AllCarRes.class);
-
         return allCarRes;
     }
 
@@ -257,11 +256,6 @@ public class Fragment03 extends BaseFragment {
             e.printStackTrace();
         }
 
-        // FIXME Fake data
-//        pecCarRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[" +
-//                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}," +
-//                "{\"carnumber\":\"鲁B10001\",\"pcode\":\"1001A\",\"paddr\":\"学院路\",\"datetime\":\" 2016/5/21 8:19:21\"}" +
-//                "]}", PecCarRes.class);
 
         return pecCarRes;
     }

@@ -1,5 +1,6 @@
 package vip.zhonghui.edu.ui.fragment02;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import okhttp3.Response;
 import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.Fragment02Binding;
 import vip.zhonghui.edu.ui.BaseFragment;
+import vip.zhonghui.edu.ui.fragment01.RechargeRes;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
@@ -44,13 +46,13 @@ public class Fragment02 extends BaseFragment {
 
     private int[] mImageSrcArr = {R.drawable.image_1, R.drawable.image_2, R.drawable.image_3};
 
-    private Handler mImageHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            changeImage(msg.what);
-        }
-    };
+//    private Handler mImageHandler = new Handler(Looper.getMainLooper()) {
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            super.handleMessage(msg);
+//            changeImage(msg.what);
+//        }
+//    };
 
     private Handler mLightHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -69,11 +71,6 @@ public class Fragment02 extends BaseFragment {
             .connectTimeout(3, TimeUnit.SECONDS)
             .build();
 
-
-    private void changeImage(int what) {
-        mBinding.lightImage.setImageResource(mImageSrcArr[what]);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mBinding = Fragment02Binding.inflate(inflater, container, false);
@@ -84,6 +81,10 @@ public class Fragment02 extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) getContext().getDrawable(R.drawable.anim_light);
+        mBinding.lightImage.setImageDrawable(animationDrawable);
+        animationDrawable.start();
 
         mLightAdapter = new LightAdapter(mLightList);
         mBinding.lightRecycler.setAdapter(mLightAdapter);
@@ -158,29 +159,29 @@ public class Fragment02 extends BaseFragment {
             }
         });
 
-        new ImageTask().start();
+//        new ImageTask().start();
         new LightTask().start();
     }
 
-    private class ImageTask extends Thread {
-        @Override
-        public void run() {
-            super.run();
-            int n = 0;
-            while (true) {
-                int idx = n % 3;
-                Message message = new Message();
-                message.what = idx;
-                mImageHandler.sendMessage(message);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                n++;
-            }
-        }
-    }
+//    private class ImageTask extends Thread {
+//        @Override
+//        public void run() {
+//            super.run();
+//            int n = 0;
+//            while (true) {
+//                int idx = n % 3;
+//                Message message = new Message();
+//                message.what = idx;
+//                mImageHandler.sendMessage(message);
+//                try {
+//                    Thread.sleep(3000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                n++;
+//            }
+//        }
+//    }
 
     private class LightTask extends Thread {
         @Override
@@ -208,34 +209,34 @@ public class Fragment02 extends BaseFragment {
             e.printStackTrace();
         }
 
-        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+        LightInfoRes lightInfoRes = HttpUtil.sendHttpRequest(getContext(),
+                "get_trafficlight_config",
+                jsonParams,
+                LightInfoRes.class);
 
-        Request lightRequest = new Request.Builder()
-                .url(UrlUtil.getUrl(getContext(), "get_trafficlight_config"))
-                .post(requestBody)
-                .build();
 
-        LightInfoRes lightInfoRes = null;
+//        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+
+//        Request lightRequest = new Request.Builder()
+//                .url(UrlUtil.getUrl(getContext(), "get_trafficlight_config"))
+//                .post(requestBody)
+//                .build();
         // COMPLETED Send a http request
-        try {
-            Response response = mHttpClient.newCall(lightRequest).execute();
-            String jsonString = response.body().string();
-            Log.d("LightRes-RESPONSE", jsonString);
-            lightInfoRes = GsonUtil.fromJson(jsonString, LightInfoRes.class);
+//        try {
+//            Response response = mHttpClient.newCall(lightRequest).execute();
+//            String jsonString = response.body().string();
+//            Log.d("LightRes-RESPONSE", jsonString);
+//            lightInfoRes = GsonUtil.fromJson(jsonString, LightInfoRes.class);
+//
+//            lightInfoRes.setRoadId(roadId);
+//            Log.d("LightInfoRes", lightInfoRes.toString());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
+        if (lightInfoRes != null) {
             lightInfoRes.setRoadId(roadId);
-            Log.d("LightInfoRes", lightInfoRes.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        // FIXME Fake data
-//        Random random = new Random();
-//        int n = random.nextInt(70);
-//        String repoStr = String.format("{\"RESULT\":\"S\",\"ERRMSG\":\"设置成功\",\n" +
-//                "\"RedTime\":\"%d\",\"GreenTime\":\"%d\",\"YellowTime\":\"%d\"}", n - 1, n, n + 1);
-//        lightInfoRes = GsonUtil.fromJson(repoStr, LightInfoRes.class);
-
         return lightInfoRes;
     }
 
