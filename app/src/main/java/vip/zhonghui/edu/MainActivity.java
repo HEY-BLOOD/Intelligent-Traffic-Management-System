@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
                 int desId = destination.getId();
-                if (desId == R.id.recordFragment || desId == R.id.detailFragment) {
+                if (desId == R.id.recordFragment) {
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 }
             }

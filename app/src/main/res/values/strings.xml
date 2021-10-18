@@ -28,4 +28,11 @@
     <string name="menu_fragment_record">充值记录</string>
     <string name="menu_fragment_detail">违章管理</string>
     <string name="no_recharge_history">暂无充值记录</string>
+    <string name="title_activity_data_detail">违章管理</string>
+    <string name="title_videos">违章视频</string>
+    <string name="title_images">违章图片</string>
+    <string name="pec_info_1">不按规定停车或车辆发生故障不立即将车移开，造成交通严重堵塞。</string>
+    <string name="pec_info_2">驾车下陡坡时熄火，空挡滑行。</string>
+    <string name="pec_info_3">路口遇有交通堵塞，强行进入。</string>
+    <string name="pec_info_4">在高速公路上机动车载物长度、宽度、高度超过规定，未经审核或者未按规定行驶的。</string>
 </resources>

@@ -31,18 +31,10 @@
         android:name="vip.zhonghui.edu.ui.fragment03.Fragment03"
         android:label="@string/menu_fragment_03"
         tools:layout="@layout/fragment_03" >
-        <action
-            android:id="@+id/action_nav_fragment_03_to_detailFragment"
-            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/recordFragment"
         android:name="vip.zhonghui.edu.ui.fragment01.RecordFragment"
         android:label="@string/menu_fragment_record"
         tools:layout="@layout/fragment_record" />
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="vip.zhonghui.edu.ui.fragment03.DetailFragment"
-        android:label="@string/menu_fragment_detail"
-        tools:layout="@layout/fragment_detail" />
 </navigation>

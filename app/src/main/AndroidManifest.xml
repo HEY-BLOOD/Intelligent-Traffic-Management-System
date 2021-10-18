@@ -13,21 +13,39 @@
         android:theme="@style/Theme.SmartTransportation"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.setting.SettingActivity"
-            android:theme="@style/Theme.SmartTransportation.NoActionBar" />
+            android:name=".ui.fragment03.detail.ShowImageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.fragment03.detail.ShowVideoActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/Theme.SmartTransportation.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.fragment03.detail.AnalysisDetailActivity"
+            android:label="@string/title_activity_data_detail"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:theme="@style/Theme.SmartTransportation.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.SmartTransportation.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

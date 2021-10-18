@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_analysis_to_detail"
-        android:icon="@drawable/detailed"
-        android:title="@string/action_detail"
-        app:showAsAction="always" />
+        android:id="@+id/action_detail_to_analysis"
+        android:icon="@drawable/analysis"
+        app:showAsAction="always"
+        android:title="TODO" />
 </menu>

@@ -1,5 +1,6 @@
 package vip.zhonghui.edu.ui.fragment03;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +16,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -31,6 +30,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import okhttp3.Request;
@@ -39,6 +39,7 @@ import okhttp3.Response;
 import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.Fragment03Binding;
 import vip.zhonghui.edu.ui.BaseFragment;
+import vip.zhonghui.edu.ui.fragment03.detail.AnalysisDetailActivity;
 import vip.zhonghui.edu.utils.GsonUtil;
 import vip.zhonghui.edu.utils.HttpUtil;
 import vip.zhonghui.edu.utils.SharedPreferencesUtil;
@@ -68,9 +69,12 @@ public class Fragment03 extends BaseFragment {
             }
         }
     };
+    private List<PecCarRes.ROWSDETAILDTO> mPecCarList = new ArrayList();
+    private List<AllCarRes.ROWSDETAILDTO> mAllCarList = new ArrayList();
 
     private void receiveAllCar(AllCarRes allCarRes) {
         if (allCarRes.getResult().equals("S")) {
+            mAllCarList = allCarRes.getRowsDetail();
             mAllCarCount = allCarRes.getRowsDetail().size();
             updateChartUI();
         }
@@ -91,6 +95,7 @@ public class Fragment03 extends BaseFragment {
     private void receivePecCar(PecCarRes pecCarRes) {
         if (pecCarRes.getResult().equals("S")) {
             List carList = new ArrayList<String>();
+            mPecCarList = pecCarRes.getRowsDetail();
             for (PecCarRes.ROWSDETAILDTO row : pecCarRes.getRowsDetail()) {
                 String carNumber = row.getCarnumber();
                 if (!carList.contains(carNumber)) {
@@ -132,6 +137,24 @@ public class Fragment03 extends BaseFragment {
 
     private void updateChartUI() {
         if (mAllCarCount > -1 && mPecCarCount > -1) {
+
+            // 所有违章车辆的车牌
+            LinkedHashSet pecCarSet = new LinkedHashSet();
+            for (PecCarRes.ROWSDETAILDTO  pec: mPecCarList){
+                pecCarSet.add(pec.getCarnumber());
+            }
+
+            // 筛选违章的黑车
+            LinkedHashSet blackCarSet = new LinkedHashSet(pecCarSet);
+            LinkedHashSet notBlackCarSet = new LinkedHashSet();
+            for (AllCarRes.ROWSDETAILDTO car : mAllCarList){
+                notBlackCarSet.add(car.getCarnumber());
+            }
+            blackCarSet.removeAll(notBlackCarSet);
+
+            // 车辆总数 加上 黑车数
+            mAllCarCount = mAllCarCount + blackCarSet.size();
+
             setupPieChart(mAllCarCount, mPecCarCount);
         }
     }
@@ -188,8 +211,9 @@ public class Fragment03 extends BaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             // COMPLETED Step 3.4 点击右上角【详情按钮】，可以跳转到违章管理界面
-            case R.id.action_detail:
-                NavHostFragment.findNavController(this).navigate(R.id.action_nav_fragment_03_to_detailFragment);
+            case R.id.action_analysis_to_detail:
+                Intent intent = new Intent(getContext(), AnalysisDetailActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
