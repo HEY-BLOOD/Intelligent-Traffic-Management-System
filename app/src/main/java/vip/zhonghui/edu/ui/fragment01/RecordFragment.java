@@ -52,55 +52,45 @@ public class RecordFragment extends BaseFragment {
         mRecordAdapter = new RecordAdapter(mRecordResFilteredList);
         mBinding.recordRecycler.setAdapter(mRecordAdapter);
 
+        // COMPLETED Step 2B.1 顶部具有筛选功能（1号、2号、3号），默认勾选 1号小车
+        onFilterOptionsSelected(1, true);
+
         mBinding.recordFilterOptions.checkBox1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isBox1Checked = isChecked;
-            if (!isBox1Checked && !isBox2Checked && !isBox1Checked) {
-                mBinding.recordFilterOptions.checkBox1.setChecked(true);
-                return;
-            }
             onFilterOptionsSelected(1, isChecked);
         });
         mBinding.recordFilterOptions.checkBox2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isBox2Checked = isChecked;
-            // FIXME use correct check box id
-            if (!isBox1Checked && !isBox2Checked && !isBox2Checked) {
-                mBinding.recordFilterOptions.checkBox2.setChecked(true);
-                return;
-            }
             onFilterOptionsSelected(2, isChecked);
         });
         mBinding.recordFilterOptions.checkBox3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isBox3Checked = isChecked;
-            // FIXME use correct check box id
-            if (!isBox1Checked && !isBox2Checked && !isBox3Checked) {
-                mBinding.recordFilterOptions.checkBox3.setChecked(true);
-                return;
-            }
             onFilterOptionsSelected(3, isChecked);
         });
 
-        // COMPLETED Step 2B.1 顶部具有筛选功能（1号、2号、3号），默认勾选 1号小车
-        onFilterOptionsSelected(1, true);
     }
 
     private void onFilterOptionsSelected(int carId, boolean isChecked) {
 
         // COMPLETED Step 2B.2 筛选功能需要实现单选多选，不能出现三项都不选的情况
-//        if (!isBox1Checked && !isBox2Checked && !isBox3Checked) {
-//            Toast.makeText(getContext(), "至少选择一项", Toast.LENGTH_SHORT).show();
-//            switch (carId) {
-//                case 1:
-//                    mBinding.recordFilterOptions.checkBox1.setChecked(true);
-//                    break;
-//                case 2:
-//                    mBinding.recordFilterOptions.checkBox2.setChecked(true);
-//                    break;
-//                case 3:
-//                    mBinding.recordFilterOptions.checkBox3.setChecked(true);
-//                    break;
-//            }
-//            return;
-//        }
+        if (!isBox1Checked && !isBox2Checked && !isBox3Checked) {
+            Toast.makeText(getContext(), "至少选择一项", Toast.LENGTH_SHORT).show();
+            switch (carId) {
+                case 1:
+                    mBinding.recordFilterOptions.checkBox1.setChecked(true);
+                    isBox1Checked = true;
+                    break;
+                case 2:
+                    mBinding.recordFilterOptions.checkBox2.setChecked(true);
+                    isBox2Checked = true;
+                    break;
+                case 3:
+                    mBinding.recordFilterOptions.checkBox3.setChecked(true);
+                    isBox3Checked = true;
+                    break;
+            }
+            return;
+        }
 
 
         // COMPLETED Step 2B.3 列表根据筛选的选项，自动显示筛选小车的充值记录（时间、充值金额、充值小车）。

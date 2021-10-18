@@ -72,7 +72,7 @@ public class RecordRes implements Parcelable {
         dest.writeInt(cost);
     }
 
-    public String getFormattedTime() {
+    public String getFormattedDateTime() {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
         String formattedTime = "";
@@ -85,7 +85,7 @@ public class RecordRes implements Parcelable {
         return formattedTime;
     }
 
-    public String getFormattedDate() {
+    public String getFormattedTime() {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
         String formattedDate = "";
@@ -98,5 +98,15 @@ public class RecordRes implements Parcelable {
         return formattedDate;
     }
 
+    public Date getDate() {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = parser.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
 }

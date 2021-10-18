@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Request;
@@ -96,8 +97,7 @@ public class Fragment01 extends BaseFragment {
     private void receiveSearch(SearchRes searchRes) {
         if (searchRes.getResult().equals("S")) {
             DecimalFormat decimalFormat = new DecimalFormat("##,##0");
-//            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(searchRes.getBalance()));
-            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(123535));
+            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(searchRes.getBalance()));
             Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "查询失败", Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class Fragment01 extends BaseFragment {
             }
             // 显示最近的一条充值记录
             RecordRes recordRes = mRecordResList.get(mRecordResList.size() - 1);
-            String message = String.format("%s%d号小车充值%d元", recordRes.getFormattedDate(),
+            String message = String.format("%s%d号小车充值%d元", recordRes.getFormattedTime(),
                     recordRes.getCarId(), recordRes.getCost());
             mBinding.recordMessage.setText(message);
         }
@@ -212,25 +212,6 @@ public class Fragment01 extends BaseFragment {
                 "get_car_account_balance",
                 jsonParams,
                 SearchRes.class);
-
-//        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
-//
-//        Request rechargeRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_car_account_balance"))
-//                .post(requestBody)
-//                .build();
-//
-//        SearchRes searchRes = null;
-//
-//        // COMPLETEDs Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(rechargeRequest).execute();
-//            String jsonString = response.body().string();
-//            Log.d("SearchRes-RESPONSE", jsonString);
-//            searchRes = GsonUtil.fromJson(jsonString, SearchRes.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         return searchRes;
     }
@@ -354,9 +335,21 @@ public class Fragment01 extends BaseFragment {
         public void run() {
             super.run();
             mRecordResList.clear();
+            Date today = new Date();
+
             for (int i = 1; i <= RECORD_CARD_ID_COUNT; i++) {
                 List<RecordRes> recordResList = requestRecordList(i);
-                mRecordResList.addAll(recordResList);
+                // only use today's records
+                List<RecordRes> todayList = new ArrayList<>();
+                for (RecordRes record : recordResList) {
+                    Date recordDate = record.getDate();
+                    if (recordDate.getYear() == today.getYear()
+                            && recordDate.getMonth() == today.getMonth()
+                            && recordDate.getDay() == today.getDay()) {
+                        todayList.add(record);
+                    }
+                }
+                mRecordResList.addAll(todayList);
             }
             Log.d("RecordTask", "size - " + mRecordResList.size());
             mRecordHandler.sendMessage(new Message());

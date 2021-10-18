@@ -54,7 +54,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordItem
         void bindView(RecordRes recordRes) {
             mBinding.cardIdValue.setText(String.valueOf(recordRes.getCarId()));
             mBinding.costValue.setText(String.valueOf(recordRes.getCost()));
-            mBinding.dateTimeValue.setText(recordRes.getFormattedTime());
+            mBinding.dateTimeValue.setText(recordRes.getFormattedDateTime());
         }
     }
 }
