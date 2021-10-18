@@ -44,16 +44,6 @@ public class Fragment02 extends BaseFragment {
 
     private Fragment02Binding mBinding;
 
-    private int[] mImageSrcArr = {R.drawable.image_1, R.drawable.image_2, R.drawable.image_3};
-
-//    private Handler mImageHandler = new Handler(Looper.getMainLooper()) {
-//        @Override
-//        public void handleMessage(@NonNull Message msg) {
-//            super.handleMessage(msg);
-//            changeImage(msg.what);
-//        }
-//    };
-
     private Handler mLightHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -159,29 +149,8 @@ public class Fragment02 extends BaseFragment {
             }
         });
 
-//        new ImageTask().start();
         new LightTask().start();
     }
-
-//    private class ImageTask extends Thread {
-//        @Override
-//        public void run() {
-//            super.run();
-//            int n = 0;
-//            while (true) {
-//                int idx = n % 3;
-//                Message message = new Message();
-//                message.what = idx;
-//                mImageHandler.sendMessage(message);
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                n++;
-//            }
-//        }
-//    }
 
     private class LightTask extends Thread {
         @Override
@@ -213,26 +182,6 @@ public class Fragment02 extends BaseFragment {
                 "get_trafficlight_config",
                 jsonParams,
                 LightInfoRes.class);
-
-
-//        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
-
-//        Request lightRequest = new Request.Builder()
-//                .url(UrlUtil.getUrl(getContext(), "get_trafficlight_config"))
-//                .post(requestBody)
-//                .build();
-        // COMPLETED Send a http request
-//        try {
-//            Response response = mHttpClient.newCall(lightRequest).execute();
-//            String jsonString = response.body().string();
-//            Log.d("LightRes-RESPONSE", jsonString);
-//            lightInfoRes = GsonUtil.fromJson(jsonString, LightInfoRes.class);
-//
-//            lightInfoRes.setRoadId(roadId);
-//            Log.d("LightInfoRes", lightInfoRes.toString());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         if (lightInfoRes != null) {
             lightInfoRes.setRoadId(roadId);
