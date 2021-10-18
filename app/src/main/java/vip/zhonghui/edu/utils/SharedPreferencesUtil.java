@@ -124,7 +124,7 @@ public class SharedPreferencesUtil {
     }
 
     public static String getIp(Context context) {
-        return getString(context, "ip", "");
+        return getString(context, "ip", "192.168.1.100");
     }
 
     public static String getPort(Context context) {
