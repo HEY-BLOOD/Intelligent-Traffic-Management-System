@@ -1,5 +1,6 @@
 package vip.zhonghui.edu.ui.home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,15 +12,19 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import vip.zhonghui.edu.R;
 import vip.zhonghui.edu.databinding.FragmentHomeBinding;
 import vip.zhonghui.edu.ui.BaseFragment;
 import vip.zhonghui.edu.utils.GsonUtil;
@@ -36,6 +41,8 @@ public class HomeFragment extends BaseFragment {
     private static final String SENSE_RES_KEY = "searchRes";
     private FragmentHomeBinding binding;
 
+    final List<RoadStatusRes> mRoadStatusResList = new ArrayList<>();
+
     final private Handler mSenseHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -50,6 +57,61 @@ public class HomeFragment extends BaseFragment {
         }
 
     };
+    private Handler mStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            for (int i = 0; i < mRoadStatusResList.size(); i++) {
+                int roadId = i + 1;
+                int status = mRoadStatusResList.get(i).getStatus();
+                updateStatus(roadId, status);
+            }
+        }
+    };
+
+    private void updateStatus(int roadId, int status) {
+        try {
+            int color = getStatusColor(status);
+            switch (roadId) {
+                case 1:
+                    binding.homeRoadStatus.homeView11.setBackgroundColor(color);
+                    binding.homeRoadStatus.homeView12.setBackgroundColor(color);
+                    binding.homeRoadStatus.homeView13.setBackgroundColor(color);
+                    binding.homeRoadStatus.homeView14.setBackgroundColor(color);
+                    break;
+                case 2:
+                    binding.homeRoadStatus.homeView2.setBackgroundColor(color);
+                    break;
+                case 3:
+                    binding.homeRoadStatus.homeView3.setBackgroundColor(color);
+                    break;
+            }
+        } catch (IllegalArgumentException e) {
+            // nothing to do
+        }
+    }
+
+    private int getStatusColor(int status) throws IllegalArgumentException {
+        int color = 0;
+        switch (status) {
+            case 1:
+                color = Color.parseColor("#0ebd12");
+                break;
+            case 2:
+                color = Color.parseColor("#98ed1f");
+                break;
+            case 3:
+                color = Color.parseColor("#ffff01");
+                break;
+            case 4:
+                color = Color.parseColor("#ff0103");
+                break;
+            case 5:
+                color = Color.parseColor("#4c060e");
+                break;
+        }
+        return color;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +133,8 @@ public class HomeFragment extends BaseFragment {
         // COMPLETED Step 1.4 点击右上角【刷新】按钮，可以刷新道路空气质量和信息
         binding.refreshButton.setOnClickListener(v -> new SenseTask().start());
 
-        // TODO Step 1.5 实时（每隔3秒）显示三条道路的路况信息查询，并根据拥堵值进行颜色标记。
-
+        // COMPLETED Step 1.5 实时（每隔3秒）显示三条道路的路况信息查询，并根据拥堵值进行颜色标记。
+        new RoadStatusTask().start();
     }
 
     /**
@@ -87,25 +149,10 @@ public class HomeFragment extends BaseFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
-
-        Request request = new Request.Builder()
-                .url(UrlUtil.getUrl(getContext(), "get_all_sense"))
-                .post(requestBody)
-                .build();
-
-        SenseRes senseRes = null;
-
-        // COMPLETED Send a http request
-        try {
-            Response response = mHttpClient.newCall(request).execute();
-            String jsonString = response.body().string();
-            Log.d("SenseRes-RESPONSE", jsonString);
-
-            senseRes = GsonUtil.fromJson(jsonString, SenseRes.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SenseRes senseRes = HttpUtil.sendHttpRequest(getContext(),
+                "get_all_sense",
+                jsonParams,
+                SenseRes.class);
 
         return senseRes;
     }
@@ -120,7 +167,6 @@ public class HomeFragment extends BaseFragment {
                 binding.senseInfo.hum.setText(senseRes.getHumidity() + "");
             }
         }
-
     }
 
     class SenseTask extends Thread {
@@ -135,6 +181,52 @@ public class HomeFragment extends BaseFragment {
             message.setData(data);
             mSenseHandler.sendMessage(message);
         }
+    }
+
+    class RoadStatusTask extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            while (true) {
+
+                mRoadStatusResList.clear();
+                // fetch three roads status
+                for (int i = 1; i <= 3; i++) {
+                    RoadStatusRes roadStatus = sendStatusRequest(i);
+                    if (roadStatus != null){
+                        mRoadStatusResList.add(roadStatus);
+                    }
+                }
+
+                mStatusHandler.sendEmptyMessage(1);
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+    }
+
+    private RoadStatusRes sendStatusRequest(int roadId) {
+        JSONObject jsonParams = new JSONObject();
+
+        try {
+            jsonParams.put("RoadId", roadId);
+            jsonParams.put("UserName", SharedPreferencesUtil.getUserName(getContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RoadStatusRes roadStatusRes = HttpUtil.sendHttpRequest(getContext(),
+                "get_road_status",
+                jsonParams,
+                RoadStatusRes.class);
+
+        return roadStatusRes;
     }
 
 }

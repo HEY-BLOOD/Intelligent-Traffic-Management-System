@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_road_bg"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/home_view1_1"
+
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#e22b2b"
+        android:gravity="center"
+        android:text="环城快速路"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/home_view1_4"
+
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:background="#e22b2b"
+        android:gravity="center"
+        android:text="环城快速路"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="@+id/home_view1_1"
+        app:layout_constraintStart_toStartOf="@+id/home_view1_1"
+        app:layout_constraintTop_toBottomOf="@+id/home_view1_2" />
+
+    <TextView
+        android:id="@+id/home_view1_2"
+
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:background="#e22b2b"
+        android:gravity="center"
+        android:text="    "
+        app:layout_constraintEnd_toEndOf="@+id/home_view1_1"
+        app:layout_constraintTop_toBottomOf="@+id/home_view1_1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/home_view3"
+
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:background="#6BE22B"
+        android:gravity="center"
+        android:text="绿\n藤\n路"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_view1_1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/home_view1_3"
+
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:background="#e22b2b"
+        android:gravity="center"
+        android:text="    "
+        app:layout_constraintStart_toStartOf="@+id/home_view1_1"
+        app:layout_constraintTop_toBottomOf="@+id/home_view1_1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/home_view2"
+
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:background="#e22b2b"
+        android:gravity="center"
+        android:text="学\n院\n路"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.256"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/home_view3"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
