@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +48,9 @@ public class DataVideosFragment extends Fragment implements OnDetailItemClickLis
 
     @Override
     public void onItemClick(int resId) {
-        Toast.makeText(getContext(), "播放视频: " + resId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(),ShowVideoActivity.class);
+        intent.putExtra(ShowVideoActivity.SHOW_VIDEO_RES_ID, resId);
+        startActivity(intent);
+//        Toast.makeText(getContext(), "播放视频: " + resId, Toast.LENGTH_SHORT).show();
     }
 }

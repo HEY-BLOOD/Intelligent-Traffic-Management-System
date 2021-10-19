@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +46,10 @@ public class DataImagesFragment extends Fragment implements OnDetailItemClickLis
 
     @Override
     public void onItemClick(int resId) {
-        Toast.makeText(getContext(), "查看图片: " + resId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), ShowImageActivity.class);
+        intent.putExtra(ShowImageActivity.SHOW_IMAGE_RES_ID, resId);
+        startActivity(intent);
+//        Toast.makeText(getContext(), "查看图片: " + resId, Toast.LENGTH_SHORT).show();
     }
 
 }
