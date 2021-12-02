@@ -89,9 +89,15 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginButton.setEnabled(false);
-                login(untext, pwtext);
+
+                // 直接登录成功，不用验证用户名和密码是否正确
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                return;
+
+//                loadingProgressBar.setVisibility(View.VISIBLE);
+//                loginButton.setEnabled(false);
+//                login(untext, pwtext);
             }
         });
     }
