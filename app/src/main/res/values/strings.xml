@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name">智能交通系统</string>
+    <string name="app_name">出行助手APP</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">智能交通系统</string>
-    <string name="nav_header_subtitle">hr@zhonghui.vip</string>
+    <string name="nav_header_title">@string/app_name</string>
+    <string name="nav_header_subtitle">道路千万条，安全第一条。行车不规范，亲人两行泪。</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">设置</string>
-    <string name="menu_home">主页</string>
-    <string name="menu_fragment_01">ETC充值</string>
-    <string name="menu_fragment_02">红绿灯管理</string>
+    <string name="menu_road_status">道路状态</string>
+    <string name="menu_recharge">ETC账户</string>
+    <string name="menu_traffic_light">红绿灯查看</string>
     <string name="title_activity_login">登录</string>
     <string name="prompt_email">请输入用户名</string>
     <string name="prompt_password">请输入密码</string>
@@ -28,11 +28,44 @@
     <string name="menu_fragment_record">充值记录</string>
     <string name="menu_fragment_detail">违章管理</string>
     <string name="no_recharge_history">暂无充值记录</string>
-    <string name="title_activity_data_detail">违章管理</string>
     <string name="title_videos">违章视频</string>
     <string name="title_images">违章图片</string>
     <string name="pec_info_1">不按规定停车或车辆发生故障不立即将车移开，造成交通严重堵塞。</string>
     <string name="pec_info_2">驾车下陡坡时熄火，空挡滑行。</string>
     <string name="pec_info_3">路口遇有交通堵塞，强行进入。</string>
     <string name="pec_info_4">在高速公路上机动车载物长度、宽度、高度超过规定，未经审核或者未按规定行驶的。</string>
+    <string name="menu_park">附近停车</string>
+
+    <string name="park_distance">距离：%s米</string>
+    <string name="park_free_total_number">剩余：%s/%s</string>
+    <string name="park_address">地址：%s</string>
+    <string name="park_recharge">收费：%s</string>
+    <string name="menu_dashboard">功能面板</string>
+    <string name="menu_action_settings">设置</string>
+    <string name="menu_action_power">" 退出"</string>
+    <string name="logout_success_helper_text">账户退出成功</string>
+    <string name="username_is_not_valid_text">输入的用户名无效。</string>
+    <string name="password_is_not_valid_text">输入的密码无效。</string>
+    <string name="user_logged_in_successfully">用户登录成功。</string>
+    <string name="sign_up_success_helper_text">用户注册成功。</string>
+    <string name="login_username">用户名/邮箱</string>
+    <string name="username">用户名</string>
+    <string name="email">电子邮箱</string>
+    <string name="password">密码</string>
+    <string name="sign_up">注册</string>
+    <string name="cancel">取消</string>
+    <string name="you_are_not_a_member">还没有账户？</string>
+    <string name="menu_help">出行交流</string>
+    <string name="sign_up_now">立即注册</string>
+    <string name="welcome_username">欢迎用户，%s！</string>
+    <string name="title_profile">我的资料</string>
+    <string name="at_username">\@%s</string>
+    <string name="title_learn">学习中心</string>
+    <string name="password_confirm">确认密码</string>
+    <string name="profile_label_created_time">注册时间</string>
+    <string name="profile_label_address">居住地址</string>
+    <string name="profile_label_email">电子邮箱</string>
+    <string name="profile_label_phone">联系电话</string>
+    <string name="profile_label_nickname">用户昵称</string>
+
 </resources>

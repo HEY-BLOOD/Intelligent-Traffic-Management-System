@@ -5,20 +5,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/dashboardFragment"
+            android:icon="@drawable/ic_baseline_dashboard_24"
+            android:title="@string/menu_dashboard" />
+        <item
+            android:id="@+id/roadStatusFragment"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:title="@string/menu_road_status" />
         <item
-            android:id="@+id/nav_fragment_01"
+            android:id="@+id/rechargeFragment"
             android:icon="@drawable/ic_menu_fragment_01"
-            android:title="@string/menu_fragment_01" />
+            android:title="@string/menu_recharge" />
         <item
-            android:id="@+id/nav_fragment_02"
+            android:id="@+id/trafficLightFragment"
             android:icon="@drawable/ic_menu_fragment_02"
-            android:title="@string/menu_fragment_02" />
+            android:title="@string/menu_traffic_light" />
         <item
-            android:id="@+id/nav_fragment_03"
+            android:id="@+id/dataAnalysisFragment"
             android:icon="@drawable/ic_menu_fragment_02"
             android:title="@string/menu_fragment_03" />
+        <item
+            android:id="@+id/parkFragment"
+            android:icon="@drawable/ic_menu_fragment_01"
+            android:title="@string/menu_park" />
     </group>
 </menu>

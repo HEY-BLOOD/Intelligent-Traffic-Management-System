@@ -3,38 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/dashboardFragment">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="vip.zhonghui.edu.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/roadStatusFragment"
+        android:name="io.b4a.itms.ui.road_status.RoadStatusFragment"
+        android:label="@string/menu_road_status"
+        tools:layout="@layout/fragment_road_status" />
 
     <fragment
-        android:id="@+id/nav_fragment_01"
-        android:name="vip.zhonghui.edu.ui.fragment01.Fragment01"
-        android:label="@string/menu_fragment_01"
-        tools:layout="@layout/fragment_01">
+        android:id="@+id/rechargeFragment"
+        android:name="io.b4a.itms.ui.recharge.RechargeFragment"
+        android:label="@string/menu_recharge"
+        tools:layout="@layout/fragment_recharge">
         <action
             android:id="@+id/action_nav_fragment_01_to_recordFragment"
             app:destination="@id/recordFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_fragment_02"
-        android:name="vip.zhonghui.edu.ui.fragment02.Fragment02"
-        android:label="@string/menu_fragment_02"
-        tools:layout="@layout/fragment_02" />
+        android:id="@+id/trafficLightFragment"
+        android:name="io.b4a.itms.ui.traffic_light.TrafficLightFragment"
+        android:label="@string/menu_traffic_light"
+        tools:layout="@layout/fragment_traffic_light" />
     <fragment
-        android:id="@+id/nav_fragment_03"
-        android:name="vip.zhonghui.edu.ui.fragment03.Fragment03"
+        android:id="@+id/dataAnalysisFragment"
+        android:name="io.b4a.itms.ui.data_analysis.DataAnalysisFragment"
         android:label="@string/menu_fragment_03"
-        tools:layout="@layout/fragment_03" >
-    </fragment>
+        tools:layout="@layout/fragment_data_analysis"></fragment>
     <fragment
         android:id="@+id/recordFragment"
-        android:name="vip.zhonghui.edu.ui.fragment01.RecordFragment"
+        android:name="io.b4a.itms.ui.recharge.RecordFragment"
         android:label="@string/menu_fragment_record"
         tools:layout="@layout/fragment_record" />
+    <fragment
+        android:id="@+id/parkFragment"
+        android:name="io.b4a.itms.ui.park.ParkFragment"
+        android:label="@string/menu_park"
+        tools:layout="@layout/fragment_park_list" />
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="io.b4a.itms.ui.dashboard.DashboardFragment"
+        android:label="@string/menu_dashboard" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="io.b4a.itms.ui.chat.ChatFragment"
+        android:label="@string/menu_help" />
+
+    <action
+        android:id="@+id/action_global_roadStatusFragment"
+        app:destination="@id/roadStatusFragment" />
+    <action
+        android:id="@+id/action_global_rechargeFragment"
+        app:destination="@id/rechargeFragment" />
+    <action
+        android:id="@+id/action_global_chatFragment"
+        app:destination="@id/chatFragment" />
+    <action
+        android:id="@+id/action_global_parkFragment"
+        app:destination="@id/parkFragment" />
+    <action
+        android:id="@+id/action_global_trafficLightFragment"
+        app:destination="@id/trafficLightFragment" />
 </navigation>

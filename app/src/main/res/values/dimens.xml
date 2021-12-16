@@ -7,4 +7,16 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="page_padding">16dp</dimen>
     <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="view_margin_16">16dp</dimen>
+    <dimen name="view_padding_08">8dp</dimen>
+    <dimen name="view_margin_08">8dp</dimen>
+    <dimen name="profile_backdrop_height">256dp</dimen>
+    <dimen name="avatar_size">48dp</dimen>
+
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="headerTextSize">28sp</dimen>
+    <dimen name="profile_avatar_size">128dp</dimen>
+    <dimen name="profile_top_padding">24dp</dimen>
+    <dimen name="dashboard_avatar_size">96dp</dimen>
 </resources>

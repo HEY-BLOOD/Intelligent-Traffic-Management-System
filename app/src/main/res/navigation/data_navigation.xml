@@ -7,11 +7,11 @@
 
     <fragment
         android:id="@+id/navigation_videos"
-        android:name="vip.zhonghui.edu.ui.fragment03.detail.DataVideosFragment"
+        android:name="io.b4a.itms.ui.learn.DataVideosFragment"
         tools:layout="@layout/fragment_data_detail" />
 
     <fragment
         android:id="@+id/navigation_images"
-        android:name="vip.zhonghui.edu.ui.fragment03.detail.DataImagesFragment"
+        android:name="io.b4a.itms.ui.learn.DataImagesFragment"
         tools:layout="@layout/fragment_data_detail" />
 </navigation>

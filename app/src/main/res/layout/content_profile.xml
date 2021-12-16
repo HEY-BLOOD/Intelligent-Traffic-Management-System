@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.profile.ProfileActivity"
+    tools:showIn="@layout/activity_profile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Theme.IntelligentTraffic.Profile.HeaderText"
+            android:layout_marginBottom="20dp"
+            android:text="详细信息" />
+
+        <RelativeLayout style="@style/Theme.IntelligentTraffic.Profile.DetailLayout">
+
+            <ImageView
+                android:id="@+id/nameImageView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailImage"
+                android:src="@drawable/ic_name" />
+
+            <TextView
+                android:id="@+id/nameTextView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMainText"
+                android:layout_toRightOf="@id/nameImageView"
+                android:text="@string/profile_label_nickname" />
+
+            <TextView
+                android:id="@+id/detail_nickname"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMiniText"
+                android:layout_toRightOf="@id/nameImageView"
+                tools:text="developer" />
+
+        </RelativeLayout>
+
+        <View style="@style/Theme.IntelligentTraffic.Profile.DetailDivider" />
+
+        <RelativeLayout style="@style/Theme.IntelligentTraffic.Profile.DetailLayout">
+
+            <ImageView
+                android:id="@+id/mobileImageView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailImage"
+                android:src="@drawable/ic_mobile" />
+
+            <TextView
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMainText"
+                android:layout_toRightOf="@id/mobileImageView"
+                android:text="@string/profile_label_phone" />
+
+            <TextView
+                android:id="@+id/detail_phone"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMiniText"
+                android:layout_toRightOf="@id/mobileImageView"
+                tools:text="+91-8129999999" />
+
+        </RelativeLayout>
+
+        <View style="@style/Theme.IntelligentTraffic.Profile.DetailDivider" />
+
+        <RelativeLayout style="@style/Theme.IntelligentTraffic.Profile.DetailLayout">
+
+            <ImageView
+                android:id="@+id/emailImageView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailImage"
+                android:src="@drawable/ic_email" />
+
+            <TextView
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMainText"
+                android:layout_toRightOf="@id/emailImageView"
+                android:text="@string/profile_label_email" />
+
+            <TextView
+                android:id="@+id/detail_email"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMiniText"
+                android:layout_toRightOf="@id/emailImageView"
+                tools:text="developer@appsnipp.com" />
+
+        </RelativeLayout>
+
+        <View style="@style/Theme.IntelligentTraffic.Profile.DetailDivider" />
+
+        <RelativeLayout style="@style/Theme.IntelligentTraffic.Profile.DetailLayout">
+
+            <ImageView
+                android:id="@+id/addressImageView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailImage"
+                android:src="@drawable/ic_address" />
+
+            <TextView
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMainText"
+                android:layout_toRightOf="@id/addressImageView"
+                android:text="@string/profile_label_address" />
+
+            <TextView
+                android:id="@+id/detail_address"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMiniText"
+                android:layout_toRightOf="@id/addressImageView"
+                tools:text="Avenue 2nd Street NW SY." />
+
+        </RelativeLayout>
+
+        <View style="@style/Theme.IntelligentTraffic.Profile.DetailDivider" />
+
+        <RelativeLayout style="@style/Theme.IntelligentTraffic.Profile.DetailLayout">
+
+            <ImageView
+                android:id="@+id/dobImageView"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailImage"
+                android:src="@drawable/ic_dob" />
+
+            <TextView
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMainText"
+                android:layout_toRightOf="@id/dobImageView"
+                android:text="@string/profile_label_created_time" />
+
+            <TextView
+                android:id="@+id/detail_birthday"
+                style="@style/Theme.IntelligentTraffic.Profile.DetailMiniText"
+                android:layout_toRightOf="@id/dobImageView"
+                tools:text="12-05-1990" />
+
+        </RelativeLayout>
+
+        <View style="@style/Theme.IntelligentTraffic.Profile.DetailDivider" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

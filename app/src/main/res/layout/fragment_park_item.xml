@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/view_margin_08"
+    android:layout_marginBottom="@dimen/view_margin_08"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/view_padding_08">
+
+        <ImageView
+            android:id="@+id/park_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/image_park_01" />
+
+        <TextView
+            android:id="@+id/park_name"
+            style="@style/TextAppearance.ParkTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/view_margin_16"
+            android:text="停车场"
+            app:layout_constraintBottom_toTopOf="@+id/distance"
+            app:layout_constraintStart_toEndOf="@+id/park_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/open_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/view_margin_08"
+            android:text="对外开放"
+            app:layout_constraintBottom_toBottomOf="@+id/park_name"
+            app:layout_constraintStart_toEndOf="@+id/park_name"
+            app:layout_constraintTop_toTopOf="@+id/park_name" />
+
+        <TextView
+            android:id="@+id/distance"
+            style="@style/TextAppearance.ParkBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="距离：123213米"
+            app:layout_constraintBottom_toTopOf="@+id/address"
+            app:layout_constraintStart_toStartOf="@+id/park_name"
+            app:layout_constraintTop_toBottomOf="@+id/park_name" />
+
+        <TextView
+            android:id="@+id/park_free_total_number"
+            style="@style/TextAppearance.ParkBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/view_margin_16"
+            android:text="剩余：50/120"
+            app:layout_constraintBottom_toBottomOf="@+id/distance"
+            app:layout_constraintStart_toEndOf="@+id/distance"
+            app:layout_constraintTop_toTopOf="@+id/distance" />
+
+        <TextView
+            android:id="@+id/address"
+            style="@style/TextAppearance.ParkBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地址：麓西南路 1 号"
+            app:layout_constraintBottom_toTopOf="@+id/charge_reference"
+            app:layout_constraintStart_toStartOf="@+id/distance"
+            app:layout_constraintTop_toBottomOf="@+id/distance" />
+
+        <TextView
+            android:id="@+id/charge_reference"
+            style="@style/TextAppearance.ParkBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收费：10 元/小时，最高 40 元/天"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/address"
+            app:layout_constraintTop_toBottomOf="@+id/address" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_number"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="@dimen/text_margin"-->
+    <!--        android:textAppearance="?attr/textAppearanceListItem" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/content"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="@dimen/text_margin"-->
+    <!--        android:textAppearance="?attr/textAppearanceListItem" />-->

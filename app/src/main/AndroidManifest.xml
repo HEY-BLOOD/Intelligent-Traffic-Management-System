@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="vip.zhonghui.edu">
+    package="io.b4a.itms">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="io.b4a.itms.IntelligentTrafficApp"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartTransportation"
+        android:theme="@style/Theme.IntelligentTraffic"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".ui.fragment03.detail.ShowImageActivity"
-            android:exported="true" />
+            android:name="io.b4a.itms.auth.AuthActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.IntelligentTraffic.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".ui.fragment03.detail.ShowVideoActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:theme="@style/Theme.SmartTransportation.NoActionBar">
+            android:name="io.b4a.itms.MainActivity"
+            android:theme="@style/Theme.IntelligentTraffic.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,27 +36,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.fragment03.detail.AnalysisDetailActivity"
-            android:label="@string/title_activity_data_detail"
-            android:parentActivityName=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name="io.b4a.itms.ui.learn.ShowImageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.IntelligentTraffic.NoActionBar" />
         <activity
-            android:name=".ui.setting.SettingActivity"
-            android:theme="@style/Theme.SmartTransportation.NoActionBar" />
+            android:name="io.b4a.itms.ui.learn.ShowVideoActivity"
+            android:exported="true"
+            android:theme="@style/Theme.IntelligentTraffic.NoActionBar" />
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.SmartTransportation.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name="io.b4a.itms.ui.learn.LearnActivity"
+            android:label="@string/title_learn"
+            android:parentActivityName="io.b4a.itms.MainActivity"
+            android:theme="@style/Theme.IntelligentTraffic.Learn" />
+        <activity
+            android:name="io.b4a.itms.ui.profile.ProfileActivity"
+            android:label="@string/title_profile"
+            android:parentActivityName="io.b4a.itms.MainActivity"
+            android:theme="@style/Theme.IntelligentTraffic.Profile" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="@string/parse_server_url" />
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="@string/parse_app_id" />
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="@string/parse_client_key" />
     </application>
 
 </manifest>

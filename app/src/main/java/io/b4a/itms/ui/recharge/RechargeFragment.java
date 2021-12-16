@@ -1,0 +1,352 @@
+package io.b4a.itms.ui.recharge;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcelable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
+import io.b4a.itms.R;
+import io.b4a.itms.base.BaseFragment;
+import io.b4a.itms.databinding.FragmentRechargeBinding;
+import io.b4a.itms.utils.GsonUtil;
+import io.b4a.itms.utils.HttpUtil;
+import io.b4a.itms.utils.SharedPreferencesUtil;
+import io.b4a.itms.utils.UrlUtil;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
+/**
+ * ETC充值
+ */
+// COMPLETED Step 2.1 通过点击侧滑菜单中的【ETC充值】按钮进入本模块。
+public class RechargeFragment extends BaseFragment {
+
+    private static final String RECHARGE_RES_KEY = "rechargeRes";
+    private static final String SEARCH_RES_KEY = "searchRes";
+    private FragmentRechargeBinding mBinding;
+    private String[] mCarIdArray = {"1号", "2号", "3号"};
+    private String[] mMoneyArray = {"100", "200", "300"};
+
+    private int mNowCarId = 1;
+    private int mNowMoney = 100;
+
+    private List<RecordRes> mRecordResList = new ArrayList<>();
+
+
+    private Handler mRechargeHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle data = msg.getData();
+
+            RechargeRes rechargeRes = data.getParcelable(RECHARGE_RES_KEY);
+            if (rechargeRes != null) {
+                receiveRecharge(rechargeRes);
+            }
+        }
+    };
+
+    private void receiveRecharge(RechargeRes rechargeRes) {
+        if (rechargeRes.getResult().equals("S")) {
+            Toast.makeText(getContext(), "充值成功", Toast.LENGTH_SHORT).show();
+            new SearchTask().start();
+            // COMPLETED Step 2.7 每次充值成功后更新顶部最近一次充值记录
+            new RecordTask().start();
+        } else {
+            Toast.makeText(getContext(), "充值失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Handler mSearchHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle data = msg.getData();
+            SearchRes searchRes = data.getParcelable(SEARCH_RES_KEY);
+            if (searchRes != null) {
+                receiveSearch(searchRes);
+            }
+        }
+    };
+
+    private void receiveSearch(SearchRes searchRes) {
+        if (searchRes.getResult().equals("S")) {
+            DecimalFormat decimalFormat = new DecimalFormat("##,##0");
+            mBinding.accountRecharge.restMoney.setText(decimalFormat.format(searchRes.getBalance()));
+            Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "查询失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Handler mRecordHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            receiveRecord();
+        }
+    };
+
+    private void receiveRecord() {
+        if (mRecordResList.isEmpty()) {
+            mBinding.recordMessage.setText(R.string.no_recharge_history);
+        } else {
+            // 按充值时间排序
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mRecordResList.sort(Comparator.comparing(RecordRes::getTime));
+            }
+            // 显示最近的一条充值记录
+            RecordRes recordRes = mRecordResList.get(mRecordResList.size() - 1);
+            String message = String.format("%s%d号小车充值%d元", recordRes.getFormattedTime(),
+                    recordRes.getCarId(), recordRes.getCost());
+            mBinding.recordMessage.setText(message);
+        }
+    }
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        // COMPLETED Step 2.2 完成ETC充值模块界面的布局（详见布局文件）
+        mBinding = FragmentRechargeBinding.inflate(inflater, container, false);
+        View root = mBinding.getRoot();
+
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // COMPLETED 2.4 完成余额查询功能，在小车ETC充值处 的车号下拉框中选择车辆好（1-3号）
+        ArrayAdapter<String> idAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_list_item, mCarIdArray);
+        mBinding.accountRecharge.cardIdSpinner.setAdapter(idAdapter);
+
+        ArrayAdapter<String> moneyAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_list_item, mMoneyArray);
+        mBinding.accountRecharge.moneySpinner.setAdapter(moneyAdapter);
+
+        initListeners();
+
+        // COMPLETED Step 2.8 进入本模块默认显示1号小车的余额
+        new SearchTask().start();
+
+        // COMPLETED Step 2.3 顶部显示最近一次充值记录…………
+        new RecordTask().start();
+
+    }
+
+    private void initListeners() {
+        mBinding.accountRecharge.cardIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mNowCarId = position + 1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // nothing to do
+            }
+        });
+
+        mBinding.accountRecharge.moneySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mNowMoney = (position + 1) * 100;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // nothing to do
+            }
+        });
+
+        // COMPLETED 2.5 点击查询按钮，显示账户余额，并弹出“查询成功”/”查询失败“的提示
+        mBinding.accountRecharge.searchButton.setOnClickListener(v -> new SearchTask().start());
+
+        // COMPLETED 2.6 完成ETC账号充值功能…………
+        mBinding.accountRecharge.rechargeButton.setOnClickListener(v -> new RechargeTask().start());
+
+        // COMPLETED 2.9 点击【更多】按钮跳转到【充值记录】模块界面
+        mBinding.recordButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(RecordFragment.RECORD_LIST_KEY, (ArrayList<? extends Parcelable>) mRecordResList);
+            Navigation.findNavController(v).navigate(R.id.action_nav_fragment_01_to_recordFragment, bundle);
+        });
+    }
+
+    private SearchRes requestSearch() {
+        JSONObject jsonParams = new JSONObject();
+
+        try {
+            jsonParams.put("CarId", mNowCarId);
+            jsonParams.put("UserName", SharedPreferencesUtil.getUserName(getContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        SearchRes searchRes = HttpUtil.sendHttpRequest(getContext(),
+//                "get_car_account_balance",
+//                jsonParams,
+//                SearchRes.class);
+
+        // FIXME Fake data
+        SearchRes searchRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\",\"Balance\":2002}", SearchRes.class);
+
+        return searchRes;
+    }
+
+
+    private RechargeRes requestRecharge() {
+        JSONObject jsonParams = new JSONObject();
+
+        try {
+            jsonParams.put("CarId", mNowCarId);
+            jsonParams.put("Money", mNowMoney);
+            jsonParams.put("UserName", SharedPreferencesUtil.getUserName(getContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        RechargeRes rechargeRes = HttpUtil.sendHttpRequest(getContext(),
+//                "set_car_account_recharge",
+//                jsonParams,
+//                RechargeRes.class);
+
+        // FIXME Fake data
+        RechargeRes rechargeRes = GsonUtil.fromJson("{\"RESULT\":\"S\",\"ERRMSG\":\"成功\"}", RechargeRes.class);
+
+
+        return rechargeRes;
+    }
+
+
+    private List<RecordRes> requestRecordList(int carId) {
+        JSONObject jsonParams = new JSONObject();
+        try {
+            // {"UserName":"user1","CarId":1}
+            jsonParams.put("UserName", SharedPreferencesUtil.getUserName(getContext()));
+            jsonParams.put("CarId", carId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody requestBody = HttpUtil.createRequestBody(jsonParams);
+
+        Request request = new Request.Builder()
+                .url(UrlUtil.getUrl(getContext(), "get_car_account_record"))
+                .post(requestBody)
+                .build();
+
+        List<RecordRes> recordResList = new ArrayList<>();
+        try {
+            // COMPLETED Send a http request
+//            Response response = mHttpClient.newCall(request).execute();
+//            String jsonString = response.body().string();
+//            Log.d("RecordRes-RESPONSE", jsonString);
+
+            // FIXME Fake data
+            String jsonString = "{\"ERRMSG\":\"成功\",\"ROWS_DETAIL\":[{\"CarId\":" + carId + ",\"Time\":\"2017-11-26 " +
+                    "04:58:11\",\"Cost\":10},{\"CarId\":" + carId + ",\"Time\":\"2021-11-29 " +
+                    "04:58:19\",\"Cost\":20},{\"CarId\":" + carId + ",\"Time\":\"2021-11-26 " +
+                    "04:58:24\",\"Cost\":30},{\"CarId\":" + carId + ",\"Time\":\"2021-12-03 " +
+                    "04:58:28\",\"Cost\":40}],\"RESULT\":\"S\"}";
+            JSONObject jsonRes = new JSONObject(jsonString);
+
+            if (jsonRes.optString("RESULT").equals("S")) {
+                JSONArray rowsDetail = jsonRes.optJSONArray("ROWS_DETAIL");
+                for (int i = 0; i < rowsDetail.length(); i++) {
+                    JSONObject record = rowsDetail.getJSONObject(i);
+                    RecordRes recordRes = GsonUtil.fromJson(record.toString(), RecordRes.class);
+                    recordResList.add(recordRes);
+                }
+            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return recordResList;
+    }
+
+
+    class SearchTask extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            SearchRes searchRes = requestSearch();
+
+            Message message = new Message();
+            Bundle data = new Bundle();
+            data.putParcelable(SEARCH_RES_KEY, searchRes);
+
+            message.setData(data);
+            mSearchHandler.sendMessage(message);
+        }
+    }
+
+    class RechargeTask extends Thread {
+        @Override
+        public void run() {
+            RechargeRes rechargeRes = requestRecharge();
+
+            Message message = new Message();
+            Bundle data = new Bundle();
+            data.putParcelable(RECHARGE_RES_KEY, rechargeRes);
+
+            message.setData(data);
+            mRechargeHandler.sendMessage(message);
+        }
+    }
+
+    class RecordTask extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            mRecordResList.clear();
+            Date today = new Date();
+
+            for (int i = 1; i <= RECORD_CARD_ID_COUNT; i++) {
+                List<RecordRes> recordResList = requestRecordList(i);
+                // only use today's records
+//                List<RecordRes> todayList = new ArrayList<>();
+//                for (RecordRes record : recordResList) {
+//                    Date recordDate = record.getDate();
+//                    if (recordDate.getYear() == today.getYear()
+//                            && recordDate.getMonth() == today.getMonth()
+//                            && recordDate.getDay() == today.getDay()) {
+//                        todayList.add(record);
+//                    }
+//                }
+                mRecordResList.addAll(recordResList);
+            }
+            Log.d("RecordTask", "size - " + mRecordResList.size());
+            mRecordHandler.sendMessage(new Message());
+        }
+    }
+
+    private static final int RECORD_CARD_ID_COUNT = 3;
+
+}

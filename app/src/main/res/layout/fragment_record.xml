@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/page_padding"
     android:paddingStart="@dimen/page_padding"
     android:paddingEnd="@dimen/page_padding"
-    tools:context=".ui.fragment01.RecordFragment">
+    tools:context=".ui.recharge.RecordFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

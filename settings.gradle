@@ -1,2 +1,2 @@
-rootProject.name = "SmartTransportation"
+rootProject.name = "出行助手APP"
 include ':app'
